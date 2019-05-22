@@ -241,11 +241,11 @@ Returns the public key of the device. Invoked by the manufacturer endpoint in or
 
 |Name|Description|Schema|
 |---|---|---|
-|**claim**  <br>*optional*|JSON content of the claim|string|
-|**iat**  <br>*optional*|Issued AT, unix time|integer|
-|**iss**  <br>*optional*|Iroha ID of the issuer|string|
-|**sgk**  <br>*optional*|PublicKey to use for signature verification|string|
-|**sub**  <br>*optional*|DID of the subject of the DID|string|
+|**claim**  <br>*required*|JSON content of the claim|string|
+|**iat**  <br>*required*|Issued AT, unix time|integer|
+|**iss**  <br>*required*|Iroha ID of the issuer|string|
+|**sgk**  <br>*required*|PublicKey to use for signature verification|string|
+|**sub**  <br>*required*|DID of the subject of the DID|string|
 
 
 <a name="encodedclaim"></a>
@@ -253,9 +253,9 @@ Returns the public key of the device. Invoked by the manufacturer endpoint in or
 
 |Name|Description|Schema|
 |---|---|---|
-|**encodedData**  <br>*optional*|JWT-encoded claim|string|
-|**id**  <br>*optional*||string|
-|**signature**  <br>*optional*|der encoding of a typical ecdsa signature|string|
+|**encodedData**  <br>*required*|JWT-encoded claim|string|
+|**id**  <br>*required*||string|
+|**signature**  <br>*required*|der encoding of a typical ecdsa signature|string|
 
 
 
