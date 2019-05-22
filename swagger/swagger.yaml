@@ -1,0 +1,178 @@
+swagger: "2.0"
+info:
+  description: "This is the client API of ALISI. Each device will expose this API in order to be identified by ALISI compliant control units."
+  version: "1.0.0"
+  title: "ALISI client"
+  contact:
+    email: "matteo.sovilla@studenti.unipd.it"
+  # license:
+  #   name: "Apache 2.0"
+  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+# host: "null"
+externalDocs:
+  description: "ALISI system documentation"
+  url: "http://www.github.com/TeoSocs/alisi-network"
+basePath: "/alisi/v1"
+tags:
+- name: "Claims"
+  description: "CRUD operations on the stored claims"
+schemes:
+- "http"
+securityDefinitions:
+  # X-API-Key: abcdef12345
+  APIKeyHeader:
+    type: apiKey
+    in: header
+    name: X-API-Key
+paths:
+  /public_key:
+    get:
+      tags:
+      - "Crypto"
+      summary: "Returns the public key"
+      description: "Returns the public key of the device. Invoked by the manufacturer endpoint in order to create the corresponding claim"
+      operationId: getPublicKey
+      responses:
+        200:
+          description: "key retrieved"
+          schema:
+            type: string
+        500:
+          description: "Internal error on crypto material"
+  /claim:
+    post:
+      tags:
+      - "Claims"
+      summary: "Add a claim"
+      description: "Create a claim providing the claimID and the JWT-encoded content"
+      operationId: "createClaim"
+      security:
+        - APIKeyHeader: []
+      parameters:
+        - name: "body"
+          in: "body"
+          description: "Claim to create"
+          required: true
+          schema:
+            $ref: "#/definitions/EncodedClaim"
+      responses:
+        201:
+          description: "created"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+    get:
+      tags:
+      - "Claims"
+      summary: "Return the claim list"
+      description: "Returns the list of claimID stored by the client"
+      operationId: "getClaimList"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              type: "string"
+
+  /claim/{claimID}:
+    parameters:
+      - name: "claimID"
+        in: "path"
+        description: "ID of the claim to fetch"
+        required: true
+        type: "string"
+    get:
+      tags:
+      - "Claims"
+      summary: "Return claim by ID"
+      description: "Given a claimID, it looks for the corresponding claim and returns it if exists"
+      operationId: "getClaimByID"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Claim"
+        404:
+          description: "claim ID not found"
+    delete:
+      tags:
+      - "Claims"
+      summary: "Delete a claim"
+      description: "Deletes the claim with this specific claimID, if it exists"
+      operationId: "deleteClaim"
+      security:
+        - APIKeyHeader: []
+      responses:
+        200:
+          description: "successful operation"
+        401:
+          $ref: "#/responses/UnauthorizedError"
+        404:
+          description: "claim ID not found"
+          
+  /claim/{claimID}/request_signed/{nonce}:
+    parameters:
+      - name: "claimID"
+        in: "path"
+        description: "ID of the claim to fetch"
+        required: true
+        type: "string"
+      - name: "nonce"
+        in: "path"
+        description: "Nonce the client needs to sign. Prevents replay attacks"
+        required: true
+        type: "integer"
+    post:
+      tags:
+      - "Claims"
+      summary: "Request a claim signed by the client"
+      description: "Create a claim request providing the claimID and the nonce that the client has to sign."
+      operationId: "requestSigned"
+      responses:
+        200:
+          $ref: "#/definitions/EncodedClaim"
+        404:
+          description: "claim ID not found"
+          
+definitions:
+  EncodedClaim:
+    type: "object"
+    properties:
+      id:
+        type: "string"
+      encodedData:
+        type: "string"
+        description: "JWT-encoded claim"
+      signature:
+        type: string
+        description: 'der encoding of a typical ecdsa signature'
+        
+  Claim:
+    type: "object"
+    properties:
+      iss: 
+        type: "string"
+        description: "Iroha ID of the issuer"
+      sgk: 
+        type: "string"
+        description: "PublicKey to use for signature verification"
+      sub: 
+        type: "string"
+        description: "DID of the subject of the DID"
+      iat: 
+        type: "integer"
+        description: "Issued AT, unix time"
+      claim: 
+        type: "string"
+        description: "JSON content of the claim"
+        
+responses:
+  UnauthorizedError:
+    description: "API key is missing or invalid"
+    headers:
+      WWW_Authenticate:
+        type: "string"

@@ -11,17 +11,18 @@
 package datamodel
 
 type Claim struct {
-	// DID of the issuer
+
+	// Iroha ID of the issuer
 	Iss string `json:"iss,omitempty"`
 
-	// PublicKey ID to use for signature verification
+	// PublicKey to use for signature verification
 	Sgk string `json:"sgk,omitempty"`
 
 	// DID of the subject of the DID
 	Sub string `json:"sub,omitempty"`
 
-	// Issued AT
-	Iat int `json:"iat,omitempty"`
+	// Issued AT, unix time
+	Iat int32 `json:"iat,omitempty"`
 
 	// JSON content of the claim
 	Claim string `json:"claim,omitempty"`

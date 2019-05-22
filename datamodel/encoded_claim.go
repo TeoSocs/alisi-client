@@ -16,9 +16,6 @@ type EncodedClaim struct {
 	// JWT-encoded claim
 	EncodedData string `json:"encodedData,omitempty"`
 
-	// the signing public key
-	PublicKey string `json:"publicKey,omitempty"`
-
-	// the nonce provided with the request, signed by the client
+	// der encoding of a typical ecdsa signature
 	Signature string `json:"signature,omitempty"`
 }
