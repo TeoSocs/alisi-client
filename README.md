@@ -269,5 +269,17 @@ Returns the public key of the device. Invoked by the manufacturer endpoint in or
 *Name* : X-API-Key  
 *In* : HEADER
 
+<a name="knownissues"></a>
+### Known issues
+Actually, the private key is stored in the folder `keys`.
 
+This is a security issues, the key should be more protected.
+For example, it could be integrated with the gnome keyring,
+or a dedicated hardware.
 
+This is not already done because this system is still running
+in a simulated environment, so a proper integration with such
+hardware is not possible iet. Software emulation is unfeasible
+too: including in a docker container the entire gnome keyring
+would skyrocket the size of the image, preventing any meaningful
+evaluation of the total size.
