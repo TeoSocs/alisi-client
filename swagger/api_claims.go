@@ -138,11 +138,6 @@ func RequestSigned(w http.ResponseWriter, req *http.Request) {
 	claim.Signature = base64.StdEncoding.EncodeToString(derEncoding)
 	//claim.Signature = string(derEncoding)map
 
-	// now I have to add my public key
-	pubKey, err := crypto.GetPublicKey()
-	pubPem := crypto.EncodePublicKeyToPem(pubKey)
-	claim.PublicKey = pubPem
-
 	w.Header().Set("Content-Type", "application/json; charset=UTF-8")
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(claim)

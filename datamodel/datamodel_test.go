@@ -107,7 +107,6 @@ func TestEncodedClaimUpdate(t *testing.T) {
 	testClaim2 := EncodedClaim{
 		Id:          testClaimId,
 		Signature:   "secondNonceSigned",
-		PublicKey:   "ecP256:93006662450255236354251156272416883962153006416004011324826100039827513637104",
 		EncodedData: "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9.eyJjbGFpbSI6InRlc3QtY2xhaW0iLCJpYXQiOiIyMDE5LTAzLTAxVDE1OjQwOjQ1LjE0MDA2ODg3MyswMTowMCIsImlzcyI6InRlc3QtaXNzdWVyIiwic2drIjoidGVzdC1zZ2siLCJzdWIiOiJ0ZXN0LXN1YmplY3QifQ.BZHH5qnI8N6ecvhLMh10nLEJZdQFwzxM6A5naI0i8mqtvlrAVcjT7uo8-LUWyNTDPlyljVRwNBM1IEBia9vP9w",
 	}
 	if err := testClaim2.Overwrite(); err != nil {

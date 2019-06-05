@@ -79,7 +79,7 @@ func GetClaim(claimId string) (claim Claim, err error) {
 
 	claim = Claim{
 		Iss:   mapClaims["iss"].(string),
-		Iat:   int(mapClaims["iat"].(float64)),
+		Iat:   int32(mapClaims["iat"].(float64)),
 		Sgk:   mapClaims["sgk"].(string),
 		Sub:   mapClaims["sub"].(string),
 		Claim: mapClaims["claim"].(string),
@@ -193,8 +193,7 @@ func (c Claim) isEqualExceptTime(other Claim) bool {
 }
 
 func (c EncodedClaim) isEqual(other EncodedClaim) bool {
-	return c.PublicKey == other.PublicKey &&
-		c.EncodedData == other.EncodedData &&
+	return c.EncodedData == other.EncodedData &&
 		c.Id == other.Id &&
 		c.Signature == other.Signature
 }
